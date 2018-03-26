@@ -36,12 +36,12 @@
                       :title="`ID ${vinnslItem.identifier}`">
                 <p class="card-text">{{vinnslItem.nncloud.status}}</p>
                 <b-tabs>
-                  <b-tab title="Description">
+                  <b-tab title="Description" active>
                     <p></p>
                     <h3>Description</h3>
                     <tree-view :data="vinnslItem.description" :options="{maxDepth: 4, rootObjectKey: 'description'}" style="text-align:left"></tree-view>
                   </b-tab>
-                  <b-tab title="Definition" active>
+                  <b-tab title="Definition">
                     <p></p>
                     <h3>Definition</h3>
                     <div>
