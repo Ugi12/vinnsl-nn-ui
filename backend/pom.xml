@@ -3,12 +3,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>backend</artifactId>
+    <artifactId>vinnsl-nn-ui-deploy</artifactId>
     <packaging>jar</packaging>
 
     <parent>
-        <groupId>de.jonashackt</groupId>
-        <artifactId>spring-boot-vuejs</artifactId>
+        <groupId>at.ac.univie.a0908270.nncloud</groupId>
+        <artifactId>vinnsl-nn-ui</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
@@ -90,6 +90,8 @@
                     </execution>
                 </executions>
             </plugin>
+
+            
         </plugins>
     </build>
 
