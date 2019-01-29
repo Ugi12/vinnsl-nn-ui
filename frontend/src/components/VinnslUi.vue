@@ -299,7 +299,7 @@
               this.errors.push(e)
             })
         } else if (this.trainingEngine === 'TensorFlowJS') {
-          AXIOS.get(this.$vinnslBackendUrlTensorFlow + '/worker').then(response => {
+          AXIOS.get(this.$vinnslBackendUrlTensorFlowJS + '/worker').then(response => {
             console.log(response)
           })
         }
