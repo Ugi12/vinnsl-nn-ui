@@ -1,5 +1,9 @@
+
+
 <template>
+
   <div class="bootstrap">
+
     <h1>{{ msg }}</h1>
     <h2>ViNNSL UI</h2>
     <!--<p></p>
@@ -20,12 +24,13 @@
       </div>
 
       <div class="row">
+
         <div class="col-lg-5">
           <div class="clearfix">
             <!--<b-btn variant="success" @click="callRestService(); showResponse=true" id="btnCallHello" class="float-right"><icon name="refresh"></icon></b-btn>-->
           </div>
           <p></p>
-          <b-list-group v-for="(item,id) in vinnslList">
+          <b-list-group v-for="(item,id) in vinnslList" :key="id">
             <b-list-group-item class="d-flex justify-content-between align-items-center" @click="getDetailsById(id)" href="#">
               {{id}}
               <b-badge :variant="`${getPillByStatus(item)}`" pill>{{item}}</b-badge>
@@ -73,7 +78,7 @@
                     <h3>Data</h3>
                     <h4>Definition Data</h4>
                     <tree-view :data="vinnslItem.definition.data" v-if="vinnslItem.definition && vinnslItem.definition.data" :options="{maxDepth: 4, rootObjectKey: 'data'}" style="text-align:left"></tree-view>
-                    <a :href="`${this.$vinnslBackendUrl}/storage/files/${vinnslItem.definition.data.dataSchemaID}`"
+                    <a :href="`${this.$vinnslStorageBackendUrl}/storage/files/${vinnslItem.definition.data.dataSchemaID}`"
                        v-if="vinnslItem.definition && vinnslItem.definition.data && vinnslItem.definition.data.dataSchemaID">See File</a>
                     <h4>Data</h4>
                     <tree-view :data="vinnslItem.data" :options="{maxDepth: 4, rootObjectKey: 'data'}" style="text-align:left"></tree-view>
@@ -193,7 +198,7 @@
         headers: ['Noting here atm. Did you call the Service?'],
         errors: [],
         selectedFile: null,
-        trainingEngine: 'DL4J', /* default */
+        trainingEngine: 'TensorFlowJS', /* default */
         fileOptions: []
       }
     },
@@ -285,7 +290,7 @@
         //  console.log(this.$vinnslBackendUrl)
         //  console.log(this.trainingEngine)
         if (this.trainingEngine === 'DL4J') {
-          AXIOS.put(this.$vinnslBackendUrl + `/worker/queue/` + id + `/`)
+          AXIOS.put(this.$vinnslBackendWorkerUrl + `/worker/queue/` + id + `/`)
             .then(response => {
               // JSON responses are automatically parsed.
               this.response = response.data
@@ -299,9 +304,13 @@
               this.errors.push(e)
             })
         } else if (this.trainingEngine === 'TensorFlowJS') {
-          AXIOS.get(this.$vinnslBackendUrlTensorFlowJS + '/worker').then(response => {
-            console.log(response)
-          })
+          AXIOS.put(this.$vinnslBackendUrlTensorFlowJS + `/worker/queue?id=` + id)
+            .then(response => {
+              console.log(response)
+            })
+            .catch(e => {
+              this.errors.push(e)
+            })
         }
       },
       getCurrentEngine () {

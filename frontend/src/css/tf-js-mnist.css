@@ -1,0 +1,12 @@
+#mnist-input-div{
+  margin-top: 50px;
+}
+
+div#mnist-input{
+  border: 10px solid black;
+  height: 280px;
+  width: 280px;
+}
+div#test{
+  color: #24d02b;
+}
