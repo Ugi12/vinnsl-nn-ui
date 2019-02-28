@@ -128,7 +128,7 @@
                     <label for="two">TensorFlow (Ugi)</label>
                     <br>
                     <input type="radio" id="three" value="TensorFlowPython" v-model="trainingEngine">
-                    <label for="two">TensorFlow (Matthias)</label>
+                    <label for="three">TensorFlow (Matthias)</label>
                     <br>
                     <span>Picked: {{ trainingEngine }}</span>
 
@@ -304,13 +304,17 @@
               this.errors.push(e)
             })
         } else if (this.trainingEngine === 'TensorFlowJS') {
-          AXIOS.put(this.$vinnslBackendUrlTensorFlowJS + `/worker/queue?id=` + id)
+          AXIOS.post(this.$vinnslBackendUrlTensorFlowJS + `/worker/queue?id=` + id)
             .then(response => {
               console.log(response)
             })
             .catch(e => {
               this.errors.push(e)
             })
+        } else if (this.trainingEngine === 'TensorFlowPython') {
+          AXIOS.get(this.$vinnslBackendUrlTensorFlowPython + '/worker').then(response => {
+            console.log(response)
+          })
         }
       },
       getCurrentEngine () {
