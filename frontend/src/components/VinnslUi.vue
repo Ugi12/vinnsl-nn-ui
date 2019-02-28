@@ -123,7 +123,7 @@
                     <label for="two">TensorFlow (Ugi)</label>
                     <br>
                     <input type="radio" id="three" value="TensorFlowPython" v-model="trainingEngine">
-                    <label for="two">TensorFlow (Matthias)</label>
+                    <label for="three">TensorFlow (Matthias)</label>
                     <br>
                     <span>Picked: {{ trainingEngine }}</span>
 
