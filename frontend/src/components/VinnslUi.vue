@@ -302,6 +302,10 @@
           AXIOS.get(this.$vinnslBackendUrlTensorFlowJS + '/worker').then(response => {
             console.log(response)
           })
+        } else if (this.trainingEngine === 'TensorFlowPython') {
+          AXIOS.get(this.$vinnslBackendUrlTensorFlowPython + '/worker').then(response => {
+            console.log(response)
+          })
         }
       },
       getCurrentEngine () {
