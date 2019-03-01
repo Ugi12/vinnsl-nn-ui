@@ -42,18 +42,52 @@
             title: 'N2Container',
             icon: 'fa fa-cog',
             badge: {
-              text: 'TensorFlow-JS',
+              text: 'TF-JS',
               class: 'badge-success'
-            }
+            },
+            child: [
+              {
+                title: 'Iris Classification',
+                icon: 'fa fa-list-alt',
+                href: '/tf-js-iris'
+              },
+              {
+                title: 'MNIST Digit Recognition',
+                icon: 'fa fa-list-alt',
+                href: '/tf-js-mnist'
+              },
+              {
+                title: 'Wine Classification',
+                icon: 'fa fa-list-alt',
+                href: '/tf-js-wine'
+              }
+            ]
           },
           {
             href: '/tensorflow-python',
-            title: 'Matthias',
+            title: 'N2Container',
             icon: 'fa fa-cog',
             badge: {
-              text: 'TensorFlow-Python',
+              text: 'TF-Python',
               class: 'badge-success'
-            }
+            },
+            child: [
+              {
+                title: 'Iris Classification',
+                icon: 'fa fa-list-alt',
+                href: '/tf-python-iris'
+              },
+              {
+                title: 'MNIST Digit Recognition',
+                icon: 'fa fa-list-alt',
+                href: '/tf-python-mnist'
+              },
+              {
+                title: 'Wine Classification',
+                icon: 'fa fa-list-alt',
+                href: '/tf-python-wine'
+              }
+            ]
           },
         /*
         {
@@ -70,7 +104,8 @@
             header: true,
             component: separator,
             visibleOnCollapse: true
-          },
+          }
+          /* ,
           {
             header: true,
             title: 'Options'
@@ -91,6 +126,7 @@
             icon: 'fa fa-list-alt',
             href: '/tf-js-wine'
           }
+          */
         ],
         collapsed: false,
         themes: ['', 'white-theme'],

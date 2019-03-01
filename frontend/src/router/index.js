@@ -1,10 +1,16 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import VinnslUi from '@/components/VinnslUi'
-import WellcomeUi from '@/components/tensorflow-js/TfJsWellcomeUi.vue'
-import IrisUi from '@/components/tensorflow-js/TfJsIrisUi.vue'
-import MnistUi from '@/components/tensorflow-js/TfJsMnistUi.vue'
-import WineUi from '@/components/tensorflow-js/TfJsWineUi.vue'
+
+import WellcomeUiJS from '@/components/tensorflow-js/TfJsWellcomeUi.vue'
+import IrisUiJS from '@/components/tensorflow-js/TfJsIrisUi.vue'
+import MnistUiJS from '@/components/tensorflow-js/TfJsMnistUi.vue'
+import WineUiJS from '@/components/tensorflow-js/TfJsWineUi.vue'
+
+import WellcomeUiPython from '@/components/tensorflow-python/TfPythonWellcomeUi.vue'
+import IrisUiPython from '@/components/tensorflow-python/TfPythonIrisUi.vue'
+import MnistUiPython from '@/components/tensorflow-python/TfPythonMnistUi.vue'
+import WineUiPython from '@/components/tensorflow-python/TfPythonWineUi.vue'
 
 Vue.use(Router)
 
@@ -22,23 +28,43 @@ export default new Router({
     },
     {
       path: '/tensorflow-js',
-      name: 'WellcomeUi',
-      component: WellcomeUi
+      name: 'WellcomeUiJS',
+      component: WellcomeUiJS
     },
     {
       path: '/tf-js-mnist',
-      name: 'MnistUi',
-      component: MnistUi
+      name: 'MnistUiJS',
+      component: MnistUiJS
     },
     {
       path: '/tf-js-iris',
-      name: 'IrisUi',
-      component: IrisUi
+      name: 'IrisUiJS',
+      component: IrisUiJS
     },
     {
       path: '/tf-js-wine',
-      name: 'WineUi',
-      component: WineUi
+      name: 'WineUiJS',
+      component: WineUiJS
+    },
+    {
+      path: '/tensorflow-python',
+      name: 'WellcomeUiPython',
+      component: WellcomeUiPython
+    },
+    {
+      path: '/tf-python-mnist',
+      name: 'MnistUiPython',
+      component: MnistUiPython
+    },
+    {
+      path: '/tf-python-iris',
+      name: 'IrisUiPython',
+      component: IrisUiPython
+    },
+    {
+      path: '/tf-python-wine',
+      name: 'WineUiPython',
+      component: WineUiPython
     }
   ]
 })

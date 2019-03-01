@@ -37,7 +37,7 @@
             </b-list-group-item>
           </b-list-group>
           <p></p>
-          <p>  {{'current training engine: '}}{{getCurrentEngine()}}</p>
+         <!-- <p>  {{'current training engine: '}}{{getCurrentEngine()}}</p> -->
         </div><br>
 
 
@@ -120,6 +120,7 @@
                     <tree-view :data="JSON.parse(vinnslItem.nncloud.dl4jNetwork)" :options="{maxDepth: 4, rootObjectKey: 'dl4j'}" style="text-align:left"></tree-view>
                   </b-tab>
 
+                  <!--
                   <b-tab title="Training Engine">
                     <input type="radio" id="one" value="DL4J" v-model="trainingEngine">
                     <label for="one">DL4J</label>
@@ -133,6 +134,7 @@
                     <span>Picked: {{ trainingEngine }}</span>
 
                   </b-tab>
+                  -->
 
                 </b-tabs>
                 <p></p>
@@ -198,7 +200,7 @@
         headers: ['Noting here atm. Did you call the Service?'],
         errors: [],
         selectedFile: null,
-        trainingEngine: 'TensorFlowJS', /* default */
+        /*   trainingEngine: '', default */
         fileOptions: []
       }
     },
@@ -289,8 +291,8 @@
       startTrainingById (id) {
         //  console.log(this.$vinnslBackendUrl)
         //  console.log(this.trainingEngine)
-        if (this.trainingEngine === 'DL4J') {
-          AXIOS.put(this.$vinnslBackendWorkerUrl + `/worker/queue/` + id + `/`)
+      //  if (this.trainingEngine === 'DL4J') {
+        AXIOS.put(this.$vinnslBackendWorkerUrl + `/worker/queue/` + id + `/`)
             .then(response => {
               // JSON responses are automatically parsed.
               this.response = response.data
@@ -303,7 +305,8 @@
             .catch(e => {
               this.errors.push(e)
             })
-        } else if (this.trainingEngine === 'TensorFlowJS') {
+    //    }
+        /* else if (this.trainingEngine === 'TensorFlowJS') {
           AXIOS.post(this.$vinnslBackendUrlTensorFlowJS + `/worker/queue?id=` + id)
             .then(response => {
               console.log(response)
@@ -316,10 +319,11 @@
             console.log(response)
           })
         }
+        */
       },
-      getCurrentEngine () {
-        return this.trainingEngine
-      },
+      // getCurrentEngine () {
+        // return this.trainingEngine
+     // },
       getPillByStatus (status) {
         // console.log(status)
         if (status === 'INPROGRESS') {

@@ -1,7 +1,7 @@
 <template>
   <div class="bootstrap">
 
-    <h3>Wine Classification clicked</h3>
+    <h3>Wine Classification clicked JS</h3>
 
   </div>
 
