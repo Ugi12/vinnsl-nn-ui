@@ -4,7 +4,8 @@ import VinnslUi from '@/components/VinnslUi'
 
 import WellcomeUiJS from '@/components/tensorflow-js/TfJsWellcomeUi.vue'
 import IrisUiJS from '@/components/tensorflow-js/TfJsIrisUi.vue'
-import MnistUiJS from '@/components/tensorflow-js/TfJsMnistUi.vue'
+import MnistTestUiJS from '@/components/tensorflow-js/TfJsMnistTestUi.vue'
+import MnistTrainUiJS from '@/components/tensorflow-js/TfJsMnistTrainUi.vue'
 import WineUiJS from '@/components/tensorflow-js/TfJsWineUi.vue'
 
 import WellcomeUiPython from '@/components/tensorflow-python/TfPythonWellcomeUi.vue'
@@ -32,9 +33,14 @@ export default new Router({
       component: WellcomeUiJS
     },
     {
-      path: '/tf-js-mnist',
-      name: 'MnistUiJS',
-      component: MnistUiJS
+      path: '/tf-js-mnist-train',
+      name: 'MnistTrainUiJS',
+      component: MnistTrainUiJS
+    },
+    {
+      path: '/tf-js-mnist-test',
+      name: 'MnistTestUiJS',
+      component: MnistTestUiJS
     },
     {
       path: '/tf-js-iris',

@@ -44,4 +44,3 @@ new Vue({
   template: '<Sidebar/>',
   components: {Sidebar}
 })
-

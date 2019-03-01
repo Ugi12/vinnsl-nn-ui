@@ -16,7 +16,10 @@
   "dependencies": {
     "axios": "^0.16.2",
     "bootstrap-vue": "^1.0.0-beta.7",
+    "child_process": "^1.0.2",
     "each-async": "^1.1.1",
+    "fabric": "^2.6.0",
+    "fs": "0.0.1-security",
     "jsdom": "^13.2.0",
     "json-beautify": "^1.0.1",
     "net": "^1.0.2",
@@ -57,6 +60,7 @@
     "eslint-plugin-promise": "^3.4.0",
     "eslint-plugin-standard": "^2.0.1",
     "eventsource-polyfill": "^0.9.6",
+    "expose-loader": "^0.7.5",
     "express": "^4.14.1",
     "extract-text-webpack-plugin": "^2.0.0",
     "file-loader": "^0.11.1",

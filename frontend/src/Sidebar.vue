@@ -54,7 +54,20 @@
               {
                 title: 'MNIST Digit Recognition',
                 icon: 'fa fa-list-alt',
-                href: '/tf-js-mnist'
+                href: '/tf-js-mnist-train',
+                badge: {
+                  text: 'train',
+                  class: 'badge-success'
+                }
+              },
+              {
+                title: 'MNIST Digit Recognition',
+                icon: 'fa fa-list-alt',
+                href: '/tf-js-mnist-test',
+                badge: {
+                  text: 'test',
+                  class: 'badge-success'
+                }
               },
               {
                 title: 'Wine Classification',
