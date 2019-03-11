@@ -58,8 +58,8 @@
                             trim
                             type="number"
                             min="0"
-                            :value="`${vinnslItem.definition.parameters.valueparameterOrBoolparameterOrComboparameter[0].value}`"
                             placeholder="e.g. 0.1">
+                            <!--:value="`${vinnslItem.definition.parameters.valueparameterOrBoolparameterOrComboparameter[0].value}`"-->
                           </b-form-input>
                       </div>
                     </div>
@@ -131,19 +131,7 @@
                      <tree-view :data="JSON.parse(vinnslItem.nncloud.dl4jNetwork)" :options="{maxDepth: 4, rootObjectKey: 'dl4j'}" style="text-align:left"></tree-view>
                    </b-tab>
 
-                   <b-tab title="Training Engine">
-                     <input type="radio" id="one" value="DL4J" v-model="trainingEngine">
-                     <label for="one">DL4J</label>
-                     <br>
-                     <input type="radio" id="two" value="TensorFlowJS" v-model="trainingEngine">
-                     <label for="two">TensorFlow (Ugi)</label>
-                     <br>
-                     <input type="radio" id="three" value="TensorFlowPython" v-model="trainingEngine">
-                     <label for="two">TensorFlow (Matthias)</label>
-                     <br>
-                     <span>Picked: {{ trainingEngine }}</span>
 
-                   </b-tab>
 
                  </b-tabs>
                  <p></p>
@@ -210,7 +198,6 @@
         headers: ['Noting here atm. Did you call the Service?'],
         errors: [],
         selectedFile: null,
-        trainingEngine: 'TensorFlowJS', /* default */
         fileOptions: [],
         epochs: '40',
         learningRate: '0.1',
@@ -355,12 +342,15 @@
           })
       },
       startTrainingById (id) {
-      //  AXIOS.get(this.$vinnslBackendUrlTensorFlowJS + `/worker/queue?id=` + id + `&epochs=` + this.epochs + `&learningRate=` + this.learningRate)
-        AXIOS.post(this.$vinnslBackendUrlTensorFlowJS + `/worker/queue`, {
+        var headers = {
+          'Content-Type': 'application/json'
+        }
+        AXIOS.get(this.$vinnslBackendUrlTensorFlowPython + `/vinnsl?id=` + id + `&epochs=` + this.epochs + `&learningRate=` + this.learningRate, {headers: headers})
+        /* AXIOS.post(this.$vinnslBackendUrlTensorFlowPython + `/vinnsl`, {
           id: id,
           epochs: this.epochs,
           learningRate: this.learningRate
-        })
+        }, {headers: headers}) */
           .then(response => {
             this.items = response.data
             console.log(response.data)
