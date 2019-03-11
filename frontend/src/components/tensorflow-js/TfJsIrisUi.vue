@@ -65,7 +65,6 @@
                           <!-- :value="`${vinnslItem.definition.parameters.valueparameterOrBoolparameterOrComboparameter[0].value}`" -->
                         </b-col>
                       </b-row>
-
                     </div>
                     <div class="col-lg-12">
                       <p></p>
@@ -357,7 +356,7 @@
           id: this.selectedVinnslItem
         })
           .then(response => {
-            console.log('response: ' + response)
+            // console.log('response: ' + response)
             this.resultForVinnslItem = response.data
 
             // console.log(response.data)
@@ -374,7 +373,7 @@
             // JSON responses are automatically parsed.
             this.vinnslItem = response.data
             this.response = response.data
-            console.log('vinnsl/' + id)
+           //  console.log('vinnsl/' + id)
             // console.log(response.data)
             this.httpStatusCode = response.status
             this.httpStatusText = response.statusText

@@ -38,30 +38,38 @@
                   <b-tab title="Settings" active>
                     <p></p>
                     <div class="col-lg-12">
-                      <div class="col-lg-5">
-                        <label>Trainings epochs:</label>
-                        <b-form-input
-                          id="inputepochs"
-                          v-model="epochs"
-                          trim
-                          type="number"
-                          min="1"
-                          :value="40"
-                          placeholder="e.g. 40">
-                        </b-form-input>
-                      </div>
-                      <div class="col-lg-5">
-                        <label> Learning Rate:</label>
-                        <b-form-input
-                          id="learningRate"
-                          v-model="learningRate"
-                          trim
-                          type="number"
-                          min="0"
-                          :value="`${vinnslItem.definition.parameters.valueparameterOrBoolparameterOrComboparameter[0].value}`"
-                          placeholder="e.g. 0.1">
-                        </b-form-input>
-                      </div>
+
+                      <b-row>
+                        <b-col>
+                          <label>Trainings epochs:</label>
+                          <b-form-input
+                            id="inputepochs"
+                            v-model="epochs"
+                            trim
+                            type="number"
+                            min="1"
+                            :value="5000"
+                            placeholder="e.g. 100">
+                          </b-form-input>
+                        </b-col>
+                        <b-col>
+                          <label> Batch size:</label>
+                          <b-form-input
+                            id="learningRate"
+                            v-model="learningRate"
+                            trim
+                            type="number"
+                            min="0"
+                            :value="0.005"
+                            placeholder="e.g. 0.01">
+                          </b-form-input>
+                          <!-- :value="`${vinnslItem.definition.parameters.valueparameterOrBoolparameterOrComboparameter[0].value}`" -->
+                        </b-col>
+                      </b-row>
+
+                      <b-row style="margin-top: 15px;">
+                        <b-col><b-progress :value="trainingProcessForSelectedItem" :precision="2" variant="success" show-progress striped :animated="animate" /></b-col>
+                      </b-row>
                     </div>
                     <div class="col-lg-12">
                       <p></p>
@@ -72,20 +80,7 @@
 
                     </div>
                   </b-tab>
-                  <!--
-                   <b-tab title="Description">
-                     <p></p>
-                     <h3>Description</h3>
-                     <tree-view :data="vinnslItem.description" :options="{maxDepth: 4, rootObjectKey: 'description'}" style="text-align:left"></tree-view>
-                   </b-tab>
-                   <b-tab title="Definition">
-                     <p></p>
-                     <h3>Definition</h3>
-                     <div>
-                       <tree-view :data="vinnslItem.definition" :options="{maxDepth: 4, rootObjectKey: 'definition'}" style="text-align:left"></tree-view>
-                     </div>
-                   </b-tab>
-                   -->
+
                   <b-tab title="Data">
                     <p></p>
                     <h3>Data</h3>
@@ -100,25 +95,27 @@
                     <a :href="`${this.$vinnslBackendUrl}/storage/files/${vinnslItem.result.file}?download=false`"
                        v-if="vinnslItem.result && vinnslItem.result.file">See File</a>
                   </b-tab>
-                  <!--
-                   <b-tab title="Instance">
-                     <p></p>
-                     <h3>Instance</h3>
-                     <tree-view :data="vinnslItem.instance" :options="{maxDepth: 4, rootObjectKey: 'instance'}" style="text-align:left"></tree-view>
-                   </b-tab>
-                   -->
-                  <b-tab title="Result">
+
+                  <b-tab title="Result" @click="loadResult();">
                     <p></p>
-                    <h3>Result</h3>
-                    <tree-view :data="vinnslItem.result" :options="{maxDepth: 4, rootObjectKey: 'result'}" style="text-align:left"></tree-view>
+
+
+                    <ul class="list-group" v-if="resultForVinnslItem.length>0">
+                      <h3>Result</h3>
+                      <li class="list-group-item"><b>Create time:</b><span style="margin-left: 58px">{{resultForVinnslItem[0]}}</span></li>
+                      <li class="list-group-item"><b>Last update time:</b> <span style="margin-left: 20px">{{resultForVinnslItem[1]}}</span></li>
+                      <li class="list-group-item"><b>Training time: </b><span style="margin-left: 47px">{{resultForVinnslItem[2]}} seconds</span></li>
+                      <li class="list-group-item"><b>Number of training:</b> <span style="margin-left: 5px">{{resultForVinnslItem[3]}}</span></li>
+                      <li class="list-group-item"><b>Best result:</b> <span style="margin-left: 60px">{{resultForVinnslItem[4]}} %</span></li>
+                      <li class="list-group-item"><b>Epochs:</b><span style="margin-left: 88px">{{resultForVinnslItem[5]}}</span></li>
+                      <li class="list-group-item"><b>Learning rate: </b><span style="margin-left: 43px">{{resultForVinnslItem[6]}}</span></li>
+                    </ul>
+                    <ul class="list-group" v-if="resultForVinnslItem.length==0">
+                      <li class="list-group-item"><b>No results exist for this network</b></li>
+
+                    </ul>
                   </b-tab>
-                  <!--
-                 <b-tab title="Status">
-                   <p></p>
-                   <h3>Status</h3>
-                   <code>{{vinnslItem.nncloud.status}}</code>
-                 </b-tab>
-                 -->
+
                   <b-tab title="Files">
                     <p></p>
                     <h3>Files</h3>
@@ -131,55 +128,16 @@
                     </div>
                   </b-tab>
 
-                  <!--
-                   <b-tab title="DL4J Transformation">
-                     <p></p>
-                     <h3>DL4J Network</h3>
-                     <tree-view :data="JSON.parse(vinnslItem.nncloud.dl4jNetwork)" :options="{maxDepth: 4, rootObjectKey: 'dl4j'}" style="text-align:left"></tree-view>
-                   </b-tab>
-
-                   <b-tab title="Training Engine">
-                     <input type="radio" id="one" value="DL4J" v-model="trainingEngine">
-                     <label for="one">DL4J</label>
-                     <br>
-                     <input type="radio" id="two" value="TensorFlowJS" v-model="trainingEngine">
-                     <label for="two">TensorFlow (Ugi)</label>
-                     <br>
-                     <input type="radio" id="three" value="TensorFlowPython" v-model="trainingEngine">
-                     <label for="two">TensorFlow (Matthias)</label>
-                     <br>
-                     <span>Picked: {{ trainingEngine }}</span>
-
-                   </b-tab>
-                   -->
-
                 </b-tabs>
                 <p></p>
                 <p></p>
-                <!--
-                <b-btn variant="success" :disabled=getTrainingButtonDisabled(vinnslItem.nncloud.status) @click="startTrainingById(vinnslItem.identifier); showResponse=true" id="btnItemStartTraining"><icon name="play"></icon> Start Training</b-btn>
-                <b-button @click="deleteById(vinnslItem.identifier); showResponse=true; callRestService();" variant="danger" class="float-right"><icon name="trash"></icon></b-button>
-                -->
+
               </b-card>
             </b-card-group>
           </div>
         </div>
       </div>
     </div>
-    <!--
-     <hr style="margin: 50px 0px;border: 1px solid #e3e3e3;">
-     <h3>Test results</h3>
-
-     <div>
-       <b-table
-         responsive
-         :items="items"
-         :striped="striped"
-         :bordered="bordered"
-         :fields="fields"
-         striped hover />
-     </div>
- -->
 
   </div>
 
@@ -221,60 +179,19 @@
         selectedFile: null,
         trainingEngine: 'TensorFlowJS', /* default */
         fileOptions: [],
-        epochs: '40',
-        learningRate: '0.1',
-        fields: {
-          petal_length: {
-            label: 'Petal length',
-            sortable: true
-          },
-          petal_width: {
-            label: 'Petal witdh',
-            sortable: true
-          },
-          sepal_length: {
-            label: 'Sepal length',
-            sortable: true
-          },
-          sepal_width: {
-            label: 'Sepal width',
-            sortable: true
-          },
-          origin_iris: {
-            label: 'Origin iris',
-            sortable: true
-          },
-          predicted_iris: {
-            label: 'Predicted iris',
-            sortable: true
-          },
-          setosa_in_percent: {
-            label: 'Setosa',
-            sortable: true
-          },
-          versicolor_in_percent: {
-            label: 'Versicolor',
-            sortable: true
-          },
-          virginica_in_percent: {
-            label: 'Virginica',
-            sortable: true
-          }
-        },
+        epochs: '5000',
+        learningRate: '0.001',
         items: [],
         striped: true,
-        bordered: true
+        bordered: true,
+        selectedVinnslItem: null,
+        resultForVinnslItem: [],
+        animate: true,
+        selectedVinnslId: '',
+        trainingProcessForSelectedItem: 0.00
       }
     },
     methods: {
-      isIrisSelected () {
-        let iris = 'iris'
-        if (iris.includes(this.vinnslItem.description.metadata.description.toLowerCase())) {
-          return true
-        } else {
-          false
-        }
-      },
       // Fetches posts when the component is created.
       callRestService () {
         AXIOS.get(this.$vinnslBackendUrl + `/status/`)
@@ -321,7 +238,42 @@
             this.errors.push(e)
           })
       },
+      loadResult () {
+        AXIOS.post(this.$vinnslBackendUrlTensorFlowJS + `/worker/statistics/wine`, {
+          id: this.selectedVinnslId
+        })
+          .then(response => {
+            // console.log('response: ' + response)
+            this.resultForVinnslItem = response.data
+
+            // console.log(response.data)
+          })
+          .catch(e => {
+            this.errors.push(e)
+          })
+      },
+      getTrainingProcess () {
+        AXIOS.post(this.$vinnslBackendUrlTensorFlowJS + `/worker/process/wine`, {
+          id: this.selectedVinnslId
+        })
+          .then(response => {
+            if (response.data.length > 0) {
+              this.trainingProcessForSelectedItem = response.data[0]
+              if (this.trainingProcessForSelectedItem === 100 || this.trainingProcessForSelectedItem === 0) {
+                this.animate = false
+              } else {
+                this.animate = true
+              }
+              console.log('getTrainingProcess: ' + response.data[0])
+            }
+          })
+          .catch(e => {
+            this.errors.push(e)
+          })
+      },
       getDetailsById (id) {
+        this.selectedVinnslId = id
+        this.loadResult()
         AXIOS.get(this.$vinnslBackendUrl + `/vinnsl/` + id)
           .then(response => {
             // JSON responses are automatically parsed.
@@ -393,15 +345,16 @@
           })
       },
       startTrainingById (id) {
-        //  AXIOS.get(this.$vinnslBackendUrlTensorFlowJS + `/worker/queue?id=` + id + `&epochs=` + this.epochs + `&learningRate=` + this.learningRate)
-        AXIOS.post(this.$vinnslBackendUrlTensorFlowJS + `/worker/queue`, {
+        AXIOS.post(this.$vinnslBackendUrlTensorFlowJS + `/worker/wine`, {
           id: id,
           epochs: this.epochs,
-          learningRate: this.learningRate
+          learningRate: this.learningRate,
+          nnSpecies: 'wine',
+          vinnslItem: this.vinnslItem
         })
           .then(response => {
-            this.items = response.data
-            console.log(response.data)
+            // this.items = response.data
+            // console.log(response.data)
           })
           .catch(e => {
             this.errors.push(e)
@@ -446,13 +399,11 @@
     },
     mounted () {
       this.getFiles()
-      this.callRestService()
 
-      /*
       setInterval(function () {
         this.callRestService()
+        this.getTrainingProcess()
       }.bind(this), 5000)
-      */
     }
   }
 </script>
