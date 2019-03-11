@@ -16,6 +16,7 @@ import TreeView from 'vue-json-tree-view'
 
 // sidebar
 import VueSidebarMenu from 'vue-sidebar-menu'
+// import ProgressBar from 'vue-simple-progress'
 import 'vue-sidebar-menu/dist/vue-sidebar-menu.css'
 Vue.use(VueSidebarMenu)
 
@@ -45,3 +46,4 @@ new Vue({
   template: '<Sidebar/>',
   components: {Sidebar}
 })
+

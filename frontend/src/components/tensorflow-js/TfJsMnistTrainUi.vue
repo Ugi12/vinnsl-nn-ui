@@ -3,7 +3,6 @@
     <!--  <h3>Iris classification</h3> -->
     <div class="container">
       <div class="row">
-
         <div class="col-lg-5">
           <div class="clearfix">
             <!--<b-btn variant="success" @click="callRestService(); showResponse=true" id="btnCallHello" class="float-right"><icon name="refresh"></icon></b-btn>-->
@@ -37,31 +36,44 @@
                 <b-tabs>
                   <b-tab title="Settings" active>
                     <p></p>
-                    <div class="col-lg-12">
-                      <div class="col-lg-5">
-                        <label>Trainings epochs:</label>
-                        <b-form-input
-                          id="inputepochs"
-                          v-model="epochs"
-                          trim
-                          type="number"
-                          min="1"
-                          :value="40"
-                          placeholder="e.g. 40">
-                        </b-form-input>
-                      </div>
-                      <div class="col-lg-5">
-                        <label> Learning Rate:</label>
-                        <b-form-input
-                          id="learningRate"
-                          v-model="learningRate"
-                          trim
-                          type="number"
-                          min="0"
-                          :value="`${vinnslItem.definition.parameters.valueparameterOrBoolparameterOrComboparameter[0].value}`"
-                          placeholder="e.g. 0.1">
-                        </b-form-input>
-                      </div>
+                    <div class="col-lg-12" id="appp">
+
+                        <b-row>
+                          <b-col>
+                            <label>Trainings epochs:</label>
+                            <b-form-input
+                              id="inputepochs"
+                              v-model="epochs"
+                              trim
+                              type="number"
+                              min="1"
+                              :value="20"
+                              placeholder="e.g. 20">
+                            </b-form-input>
+                          </b-col>
+                          <b-col>
+                            <label> Batch size:</label>
+                            <b-form-input
+                              id="batchSize"
+                              v-model="batchSize"
+                              trim
+                              type="number"
+                              min="0"
+                              :value="128"
+                              placeholder="e.g. 128">
+                            </b-form-input>
+                            <!-- :value="`${vinnslItem.definition.parameters.valueparameterOrBoolparameterOrComboparameter[0].value}`" -->
+                          </b-col>
+                        </b-row>
+
+                      <b-row style="margin-top: 15px;">
+                        <b-col><b-progress :value="trainingProcessForSelectedItem" :precision="2" variant="success" show-progress striped :animated="animate" /></b-col>
+                      </b-row>
+                      <b-row style="margin-top: 15px;">
+                        <b-col><span>info: the training takes about 75 minutes</span></b-col>
+                      </b-row>
+
+
                     </div>
                     <div class="col-lg-12">
                       <p></p>
@@ -107,10 +119,29 @@
                      <tree-view :data="vinnslItem.instance" :options="{maxDepth: 4, rootObjectKey: 'instance'}" style="text-align:left"></tree-view>
                    </b-tab>
                    -->
-                  <b-tab title="Result">
+                  <b-tab title="Result" @click="loadResult();">
                     <p></p>
-                    <h3>Result</h3>
-                    <tree-view :data="vinnslItem.result" :options="{maxDepth: 4, rootObjectKey: 'result'}" style="text-align:left"></tree-view>
+
+
+                    <ul class="list-group" v-if="resultForVinnslItem.length>0">
+                      <h3>Result</h3>
+                      <li class="list-group-item"><b>Create time:</b><span style="margin-left: 58px">{{resultForVinnslItem[0]}}</span></li>
+                      <li class="list-group-item"><b>Last update time:</b> <span style="margin-left: 20px">{{resultForVinnslItem[1]}}</span></li>
+                      <li class="list-group-item"><b>Training time: </b><span style="margin-left: 47px">{{resultForVinnslItem[2]}} minutes</span></li>
+                      <li class="list-group-item"><b>Number of training:</b> <span style="margin-left: 5px">{{resultForVinnslItem[3]}}</span></li>
+                      <li class="list-group-item"><b>Best result:</b> <span style="margin-left: 63px">{{resultForVinnslItem[4]}} %</span></li>
+                      <li class="list-group-item"><b>Loss:</b> <span style="margin-left: 105px">{{resultForVinnslItem[5]}}</span></li>
+                      <li class="list-group-item"><b>Epochs:</b><span style="margin-left: 88px">{{resultForVinnslItem[6]}}</span></li>
+                      <li class="list-group-item"><b>Batch size: </b><span style="margin-left: 65px">{{resultForVinnslItem[7]}}</span></li>
+                    </ul>
+                    <ul class="list-group" v-if="resultForVinnslItem.length==0">
+                      <li class="list-group-item"><b>No results exist for this network</b></li>
+
+                    </ul>
+
+                    <!--
+                    <tree-view :data="resultForVinnslItem" :options="{maxDepth: 4, rootObjectKey: 'result'}" style="text-align:left"></tree-view>
+                   -->
                   </b-tab>
                   <!--
                  <b-tab title="Status">
@@ -180,7 +211,6 @@
         striped hover />
     </div>
 -->
-
   </div>
 
 </template>
@@ -191,6 +221,7 @@
   import {AXIOS} from '../http-common'
 
   export default {
+
     name: 'iris-tf-js-ui',
     computed: {
       epochState () {
@@ -221,49 +252,16 @@
         selectedFile: null,
         trainingEngine: 'TensorFlowJS', /* default */
         fileOptions: [],
-        epochs: '40',
-        learningRate: '0.1',
-        fields: {
-          petal_length: {
-            label: 'Petal length',
-            sortable: true
-          },
-          petal_width: {
-            label: 'Petal witdh',
-            sortable: true
-          },
-          sepal_length: {
-            label: 'Sepal length',
-            sortable: true
-          },
-          sepal_width: {
-            label: 'Sepal width',
-            sortable: true
-          },
-          origin_iris: {
-            label: 'Origin iris',
-            sortable: true
-          },
-          predicted_iris: {
-            label: 'Predicted iris',
-            sortable: true
-          },
-          setosa_in_percent: {
-            label: 'Setosa',
-            sortable: true
-          },
-          versicolor_in_percent: {
-            label: 'Versicolor',
-            sortable: true
-          },
-          virginica_in_percent: {
-            label: 'Virginica',
-            sortable: true
-          }
-        },
+        epochs: '20',
+        batchSize: '128',
         items: [],
         striped: true,
-        bordered: true
+        bordered: true,
+        animate: true,
+        selectedVinnslId: '',
+        trainingProcessForSelectedItem: 0.00,
+        selectedVinnslItem: null,
+        resultForVinnslItem: []
       }
     },
     methods: {
@@ -322,6 +320,9 @@
           })
       },
       getDetailsById (id) {
+        this.resultForVinnslItem = []
+        this.selectedVinnslItem = id
+        this.getTrainingProcess()
         AXIOS.get(this.$vinnslBackendUrl + `/vinnsl/` + id)
           .then(response => {
             // JSON responses are automatically parsed.
@@ -394,14 +395,30 @@
       },
       startTrainingById (id) {
         //  AXIOS.get(this.$vinnslBackendUrlTensorFlowJS + `/worker/queue?id=` + id + `&epochs=` + this.epochs + `&learningRate=` + this.learningRate)
-        AXIOS.post(this.$vinnslBackendUrlTensorFlowJS + `/worker/queue`, {
+        AXIOS.post(this.$vinnslBackendUrlTensorFlowJS + `/worker/mnist`, {
           id: id,
           epochs: this.epochs,
-          learningRate: this.learningRate
+          batchSize: this.batchSize,
+          nnSpecies: 'mnist',
+          vinnslItem: this.vinnslItem
         })
           .then(response => {
-            this.items = response.data
-            console.log(response.data)
+           // this.items = response.data
+            // console.log(response.data)
+          })
+          .catch(e => {
+            this.errors.push(e)
+          })
+      },
+      loadResult () {
+        AXIOS.post(this.$vinnslBackendUrlTensorFlowJS + `/worker/statistics/mnist`, {
+          id: this.selectedVinnslItem
+        })
+          .then(response => {
+            // console.log('response: ' + response)
+            this.resultForVinnslItem = response.data
+
+            // console.log(response.data)
           })
           .catch(e => {
             this.errors.push(e)
@@ -435,6 +452,20 @@
       rowClass (item, type) {
         if (!item) return
         if (item.status === 'awesome') return 'table-success'
+      },
+      getTrainingProcess () {
+        AXIOS.post(this.$vinnslBackendUrlTensorFlowJS + `/worker/process/mnist`, {
+          id: this.selectedVinnslItem
+        })
+          .then(response => {
+            if (response.data.length > 0) {
+              this.trainingProcessForSelectedItem = response.data[0]
+              console.log('getTrainingProcess: ' + response.data[0])
+            }
+          })
+          .catch(e => {
+            this.errors.push(e)
+          })
       }
     },
     filters: {
@@ -447,12 +478,10 @@
     mounted () {
       this.getFiles()
       this.callRestService()
-
-      /*
       setInterval(function () {
         this.callRestService()
+        this.getTrainingProcess()
       }.bind(this), 5000)
-      */
     }
   }
 </script>
