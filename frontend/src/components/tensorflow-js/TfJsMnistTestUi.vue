@@ -7,6 +7,21 @@
 
         <!-- @mousedown="handleMouseDown" @mousemove="handleMouseMove" @mouseup="handleMouseUp" -->
         <canvas id="canvas" width="280" height="280" @mousedown="handleMouseDown" @mousemove="handleMouseMove" @mouseup="handleMouseUp" class="canvas"></canvas>
+        <div class="square" width="280" height="280">
+          <div class="predicted-number">
+            <span v-show="predictedClass === 0">0</span>
+            <span v-show="predictedClass === 1">1</span>
+            <span v-show="predictedClass === 2">2</span>
+            <span v-show="predictedClass === 3">3</span>
+            <span v-show="predictedClass === 4">4</span>
+            <span v-show="predictedClass === 5">5</span>
+            <span v-show="predictedClass === 6">6</span>
+            <span v-show="predictedClass === 7">7</span>
+            <span v-show="predictedClass === 8">8</span>
+            <span v-show="predictedClass === 9">9</span>
+
+          </div>
+        </div>
         <br>
       </div>
       <div class="row">
@@ -21,8 +36,6 @@
 </template>
 <script>
   import {AXIOS} from '../http-common'
-  import FormData from 'form-data'
-  // import {fabric} from 'fabric'
 
   export default {
     data: function () {
@@ -35,7 +48,9 @@
           }
         },
         canvas: '',
-        ctx: ''
+        ctx: '',
+        model: null,
+        predictedClass: ''
       }
     },
     methods: {
@@ -71,7 +86,7 @@
 
           this.ctx.lineTo(this.mouse.current.x, this.mouse.current.y)
           this.ctx.strokeStyle = '#2b2b2b'
-          this.ctx.lineWidth = 8
+          this.ctx.lineWidth = 16
           this.ctx.stroke()
         }
       },
@@ -79,33 +94,19 @@
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
         this.ctx.beginPath()
         this.ctx.moveTo(0, 0)
+        this.predictedClass = ''
       },
-      predict: function () {
+      predict: async function () {
         this.canvas = document.getElementById('canvas')
         this.ctx = this.canvas.getContext('2d')
-        // let myImage = this.ctx.createImageData(28, 28)
 
-        console.log('predict clicked')
-        // let factor = (1 / 10) // (280 /28)= 10
-        let data = this.canvas.toDataURL({
-          format: 'png',
-          withoutShadow: true
-        })
-        let formData = new FormData()
-        formData.append('data', 0)
-        formData.append('param', 'ugi')
-        formData.append('test', 'boo')
+        let dataUrl = this.canvas.toDataURL('image/png')
 
-        console.log('predict clicked2' + data)
-        AXIOS.post(this.$vinnslBackendUrlTensorFlowJS + `/worker/test/mnist`, {
-          data: formData,
-          headers: {
-            'Content-Type': `multipart/form-data`
-          }
+        AXIOS.post(this.$vinnslBackendUrlTensorFlowJS + `/worker/predict-on-server/mnist`, {
+          imageData: dataUrl
         })
           .then(response => {
-            // this.items = response.data
-            console.log('back from mnist test' + response.data)
+            this.predictedClass = response.data[0]
           })
           .catch(e => {
             console.log(e)
@@ -118,16 +119,6 @@
       this.ctx = this.canvas.getContext('2d')
       this.ctx.translate(0.5, 0.5)
       this.ctx.imageSmoothingEnabled = false
-
-      /*
-      this.canvas = new fabric.Canvas('canvas')
-      this.canvas.backgroundColor = '#efefef'
-      this.canvas.isDrawingMode = 1
-      this.canvas.freeDrawingBrush.color = 'black'
-      this.canvas.freeDrawingBrush.width = 10
-      this.canvas.renderAll()
-      */
-      console.log('in mounted')
     }
   }
 
@@ -136,6 +127,17 @@
   canvas {
     background: white;
     box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.2);
+  }
+  .square{
+    position: relative;
+    width: 280px;
+    margin-left: 10%;
+    background: white;
+    box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.2);
+  }
+  .predicted-number{
+    font-size: 180px;
+    text-align: center;
   }
 
 </style>
