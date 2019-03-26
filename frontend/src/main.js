@@ -13,6 +13,7 @@ import 'vue-sidebar-menu/dist/vue-sidebar-menu'
 import Icon from 'vue-awesome/components/Icon'
 // json tree view
 import TreeView from 'vue-json-tree-view'
+import VueNumeric from 'vue-numeric'
 
 // sidebar
 import VueSidebarMenu from 'vue-sidebar-menu'
@@ -35,6 +36,7 @@ Vue.prototype.$vinnslBackendUrlTensorFlowPython = 'http://localhost:4000'
 
 // Bootstrap
 Vue.use(BootstrapVue)
+Vue.use(VueNumeric)
 
 // font aweseome
 Vue.component('icon', Icon)
