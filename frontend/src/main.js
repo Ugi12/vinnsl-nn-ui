@@ -14,12 +14,14 @@ import Icon from 'vue-awesome/components/Icon'
 // json tree view
 import TreeView from 'vue-json-tree-view'
 import VueNumeric from 'vue-numeric'
+import VueMaterial from 'vue-material'
 
 // sidebar
 import VueSidebarMenu from 'vue-sidebar-menu'
 // import ProgressBar from 'vue-simple-progress'
 import 'vue-sidebar-menu/dist/vue-sidebar-menu.css'
 Vue.use(VueSidebarMenu)
+Vue.use(VueMaterial)
 
 Vue.use(TreeView)
 
