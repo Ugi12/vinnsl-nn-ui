@@ -39,7 +39,7 @@
                     <p></p>
                     <div v-if="!vinnslItem.definition">
                       <br>
-                      <b-alert show variant="danger">You must to add ViNNSL Definition to your network</b-alert>
+                      <b-alert show variant="danger">You must add ViNNSL Definition to your network</b-alert>
                     </div>
                     <!--
                    <div class="col-lg-12">

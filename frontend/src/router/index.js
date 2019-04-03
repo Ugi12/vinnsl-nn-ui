@@ -14,6 +14,7 @@ import IrisUiPython from '@/components/tensorflow-python/TfPythonIrisUi.vue'
 import MnistUiPython from '@/components/tensorflow-python/TfPythonMnistTrainUi.vue'
 import MnistTestUiPython from '@/components/tensorflow-python/TfPythonMnistTestUi.vue'
 import WineUiPython from '@/components/tensorflow-python/TfPythonWineUi.vue'
+import LstmUiPython from '@/components/tensorflow-python/TfPythonLstmTrain.vue'
 
 Vue.use(Router)
 
@@ -83,6 +84,11 @@ export default new Router({
       path: '/tf-python-wine',
       name: 'WineUiPython',
       component: WineUiPython
+    },
+    {
+      path: '/tf-python-lstm',
+      name: 'LstmUiPython',
+      component: LstmUiPython
     }
   ]
 })

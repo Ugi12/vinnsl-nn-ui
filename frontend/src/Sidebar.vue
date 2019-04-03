@@ -109,6 +109,11 @@
                 title: 'Wine Classification',
                 icon: 'fa fa-list-alt',
                 href: '/tf-python-wine'
+              },
+              {
+                title: 'Long Short Term Memory',
+                icon: 'fa fa-list-alt',
+                href: '/tf-python-lstm'
               }
             ]
           },
