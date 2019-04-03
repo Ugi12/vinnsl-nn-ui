@@ -11,6 +11,7 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 import 'vue-awesome/icons'
 import 'vue-sidebar-menu/dist/vue-sidebar-menu'
 import Icon from 'vue-awesome/components/Icon'
+import VueFlashMessage from 'vue-flash-message'
 // json tree view
 import TreeView from 'vue-json-tree-view'
 import VueNumeric from 'vue-numeric'
@@ -22,6 +23,7 @@ import VueSidebarMenu from 'vue-sidebar-menu'
 import 'vue-sidebar-menu/dist/vue-sidebar-menu.css'
 Vue.use(VueSidebarMenu)
 Vue.use(VueMaterial)
+Vue.use(VueFlashMessage)
 
 Vue.use(TreeView)
 

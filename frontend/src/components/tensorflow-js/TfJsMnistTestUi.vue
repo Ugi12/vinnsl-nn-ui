@@ -1,8 +1,17 @@
 <template>
 
   <div class='bootstrap'>
-    <h3>MNIST Page </h3>
+    <h3> </h3>
     <div class='container'>
+      <div class="col-lg-8">
+        <h2 id="header">MNIST Draw</h2>
+        <p>Draw a single digit (0-9) in the box to the left, then click Predict.</p>
+        <p>A machine learning model trained by Tensorflow.js against the MNIST character dataset will classify the image. Scores for each classification label are plotted in the right box.</p>
+        <br>
+      </div>
+
+      <div class="col-lg-12">
+
       <div class='row'>
 
         <!-- @mousedown="handleMouseDown" @mousemove="handleMouseMove" @mouseup="handleMouseUp" -->
@@ -30,6 +39,7 @@
           <button type="button" class="btn btn-default" @click="clearCanvas">Clear</button>
         </div>
       </div>
+    </div>
     </div>
   </div>
 

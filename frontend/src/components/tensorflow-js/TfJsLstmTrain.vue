@@ -1,7 +1,9 @@
 <template>
   <div class="bootstrap">
     <!--  <h3>Iris classification</h3> -->
+
     <div class="container">
+
       <div class="row">
         <div class="col-lg-5">
           <div class="clearfix">
@@ -42,7 +44,7 @@
                     <div class="col-lg-12" id="appp">
                       <div v-if="!vinnslItem.definition">
                         <br>
-                        <b-alert show variant="danger">You must to add ViNNSL Definition to your network</b-alert>
+                        <b-alert show variant="warning">You have to add ViNNSL Definition to your network</b-alert>
                       </div>
                       <div v-if="vinnslItem.definition">
                         <b-row style="margin-top: 15px;">
@@ -52,11 +54,14 @@
                         <div class="col-lg-12">
                           <p></p>
                           <p></p>
-                          <b-btn variant="success" :disabled=disableSaveButton @click="saveTextInDB(vinnslItem.identifier);" id="btnItemSaveText"><icon name="save"></icon> Save Text</b-btn>
+                          <b-btn variant="success" @click="saveTextInDB(vinnslItem.identifier);" id="btnItemSaveText"><icon name="save"></icon> Save Text</b-btn>
 
                           <b-btn variant="success" :disabled=getTrainingButtonDisabled(vinnslItem.nncloud.status) @click="startTrainingById(vinnslItem.identifier); showResponse=true" id="btnItemStartTraining"><icon name="play"></icon> Start Training</b-btn>
+
                           <b-button @click="deleteById(vinnslItem.identifier); showResponse=true; callRestService();" variant="danger" class="float-right"><icon name="trash"></icon></b-button>
                         </div>
+
+                        <div class="col-lg-12" style="margin-top: 4px"><flash-message class=""></flash-message></div>
                       </div>
                     </div>
 
@@ -64,48 +69,60 @@
                   <b-tab title="Generate Text">
                     <p></p>
                     <h3></h3>
-                    <md-field class="rcorners" v-if="vinnslItem.definition">
-                      <md-textarea v-model="generatedtext" :disabled="true"></md-textarea>
-                    </md-field>
-                    <div class="col-lg-12">
-                      <b-row>
+                    <div v-if="foundResult">
+                      <md-field class="rcorners" v-if="vinnslItem.definition">
+                        <md-textarea v-model="generatedtext" :disabled="true"></md-textarea>
+                      </md-field>
+                      <div class="col-lg-12">
+                        <b-row>
 
-                        <b-col>
-                          <label>Length of the generated text:</label>
-                          <b-form-input
-                            id="genTextLenId"
-                            v-model="genTextLen"
-                            trim
-                            type="number"
-                            min="1"
-                            :value="genTextLen"
-                            placeholder="e.g. 100">
-                          </b-form-input>
-                        </b-col>
-                        <b-col>
-                          <label> Generation temperature:</label>
-                          <b-form-input
-                            id="genTemperatureId"
-                            v-model="genTemperature"
-                            trim
-                            min="0"
-                            max="1"
-                            :value="genTemperature"
-                            placeholder="e.g. 0.75">
-                          </b-form-input>
+                          <b-col>
+                            <label>Length of the generated text:</label>
+                            <b-form-input
+                              id="genTextLenId"
+                              v-model="genTextLen"
+                              trim
+                              type="number"
+                              min="1"
+                              :value="genTextLen"
+                              placeholder="e.g. 200">
+                            </b-form-input>
+                          </b-col>
+                          <b-col>
+                            <label> Generation temperature:</label>
+                            <b-form-input
+                              id="genTemperatureId"
+                              v-model="genTemperature"
+                              trim
+                              min="0"
+                              max="1"
+                              :value="genTemperature"
+                              placeholder="e.g. 0.75, (allowed > 0 & <= 1)">
+                            </b-form-input>
 
-                        </b-col>
+                          </b-col>
 
-                      </b-row>
-                      <b-row>
-                        <b-col>
-                          <br>
-                          <b-btn variant="success" :disabled=getTrainingButtonDisabled(vinnslItem.nncloud.status) @click="generateTextById(vinnslItem.identifier); showResponse=true" id="btnItemGenerateText"> Generate Text</b-btn>
+                        </b-row>
+                        <b-row>
+                          <b-col>
+                            <br>
+                            <b-btn variant="success" :disabled=getTrainingButtonDisabled(vinnslItem.nncloud.status) @click="generateTextById(vinnslItem.identifier); showResponse=true" id="btnItemGenerateText"> Generate Text</b-btn>
+                            <i id="info-icon" class="fa fa-info-circle" style="font-size:24px;"></i>
+                            <b-tooltip target="info-icon" placement="right">
+                              If not entered a specific input, default values will be used.
+                              (Length of the generated text: 200 and Generation temperature: 0.75)
+                            </b-tooltip>
+                          </b-col>
+                        </b-row>
 
-                        </b-col>
-                      </b-row>
 
+                      </div>
                     </div>
+                    <div v-if="!foundResult">
+                      <br>
+                      <b-alert show variant="warning">You have to train your network first to generate a text</b-alert>
+                    </div>
+
 
                       </b-tab>
 
@@ -154,12 +171,14 @@
     </div>
   </div>
 
+
 </template>
 
 
 <script>
   import {AXIOS} from '../http-common'
   import 'vue-material/dist/vue-material.min.css'
+  import 'vue-flash-message/dist/vue-flash-message.min.css'
   export default {
     name: 'TfJsLstmTrain',
     data () {
@@ -209,12 +228,13 @@
           loss: ''
         },
         foundResult: false,
-        disableSaveButton: true
+        disableTrainingButton: true
+
       }
     },
     watch: {
       textarea: function (value) {
-        this.disableSaveButton = false
+       // this.disableTrainingButton = false
         console.log('watched:' + value)
       },
       genTextLenId: function () {
@@ -355,15 +375,26 @@
           })
       },
       saveTextInDB (id) {
-        AXIOS.post(this.$vinnslBackendUrlTensorFlowJS + `/worker/save/text/lstm`, {
+        AXIOS.post(this.$vinnslBackendUrl + `/vinnsl/save-text/lstm`, {
           id: id,
           text: this.textarea
         })
           .then(response => {
+            if (response.data.text <= 0) {
+              this.disableTrainingButton = true
+            } else {
+              this.disableTrainingButton = false
+            }
+            this.flash('Text successfully saved', 'success', {
+              timeout: 3000
+            })
             // this.items = response.data
             // console.log(response.data)
           })
           .catch(e => {
+            this.flash('Text can not be saved', 'error', {
+              timeout: 3000
+            })
             this.errors.push(e)
           })
       },
@@ -373,10 +404,11 @@
         AXIOS.get(this.$vinnslBackendUrl + `/vinnsl/get-text/lstm/` + id)
           .then(response => {
             this.textarea = response.data
-            setTimeout(function () {
-            }, 2000)
-            this.disableSaveButton = true
-            // console.log(response.data)
+            if (response.data.length <= 0) {
+              this.disableTrainingButton = true
+            } else {
+              this.disableTrainingButton = false
+            }
           })
           .catch(e => {
             this.errors.push(e)
@@ -425,6 +457,7 @@
         return 'primary'
       },
       getTrainingButtonDisabled (status) {
+        if (this.disableTrainingButton) return true
         if (status === 'CREATED') {
           return false
         }

@@ -6,18 +6,20 @@
     "kind" : "Service",
     "metadata" : {
       "annotations" : {
-        "fabric8.io/iconUrl" : "img/icons/spring-boot.svg",
-        "prometheus.io/scrape" : "true",
-        "fabric8.io/scm-tag" : "HEAD",
+        "fabric8.io/git-commit" : "6d4128d781af61347c595729ab27c122af5078e6",
         "prometheus.io/port" : "9779",
-        "fabric8.io/scm-url" : "https://github.com/spring-projects/spring-boot/spring-boot-starter-parent/spring-boot-vuejs/backend"
+        "fabric8.io/scm-url" : "https://github.com/spring-projects/spring-boot/spring-boot-starter-parent/vinnsl-nn-ui/vinnsl-nn-ui-deploy",
+        "fabric8.io/iconUrl" : "img/icons/spring-boot.svg",
+        "fabric8.io/git-branch" : "master",
+        "prometheus.io/scrape" : "true",
+        "fabric8.io/scm-tag" : "HEAD"
       },
       "labels" : {
         "testProject" : "vinnsl-ui",
-        "app" : "backend",
+        "app" : "vinnsl-nn-ui-deploy",
         "provider" : "fabric8",
         "version" : "0.0.1-SNAPSHOT",
-        "group" : "de.jonashackt"
+        "group" : "at.ac.univie.a0908270.nncloud"
       },
       "name" : "vinnsl-ui"
     },
@@ -29,9 +31,9 @@
         "targetPort" : 8088
       } ],
       "selector" : {
-        "app" : "backend",
+        "app" : "vinnsl-nn-ui-deploy",
         "provider" : "fabric8",
-        "group" : "de.jonashackt"
+        "group" : "at.ac.univie.a0908270.nncloud"
       },
       "type" : "NodePort"
     }
@@ -40,27 +42,29 @@
     "kind" : "DeploymentConfig",
     "metadata" : {
       "annotations" : {
+        "fabric8.io/git-commit" : "6d4128d781af61347c595729ab27c122af5078e6",
         "fabric8.io/iconUrl" : "img/icons/spring-boot.svg",
-        "fabric8.io/metrics-path" : "dashboard/file/kubernetes-pods.json/?var-project=backend&var-version=0.0.1-SNAPSHOT",
+        "fabric8.io/git-branch" : "master",
+        "fabric8.io/metrics-path" : "dashboard/file/kubernetes-pods.json/?var-project=vinnsl-nn-ui-deploy&var-version=0.0.1-SNAPSHOT",
         "fabric8.io/scm-tag" : "HEAD",
-        "fabric8.io/scm-url" : "https://github.com/spring-projects/spring-boot/spring-boot-starter-parent/spring-boot-vuejs/backend"
+        "fabric8.io/scm-url" : "https://github.com/spring-projects/spring-boot/spring-boot-starter-parent/vinnsl-nn-ui/vinnsl-nn-ui-deploy"
       },
       "labels" : {
         "testProject" : "vinnsl-ui",
-        "app" : "backend",
+        "app" : "vinnsl-nn-ui-deploy",
         "provider" : "fabric8",
         "version" : "0.0.1-SNAPSHOT",
-        "group" : "de.jonashackt"
+        "group" : "at.ac.univie.a0908270.nncloud"
       },
-      "name" : "backend"
+      "name" : "vinnsl-nn-ui-deploy"
     },
     "spec" : {
       "replicas" : 1,
       "revisionHistoryLimit" : 2,
       "selector" : {
-        "app" : "backend",
+        "app" : "vinnsl-nn-ui-deploy",
         "provider" : "fabric8",
-        "group" : "de.jonashackt"
+        "group" : "at.ac.univie.a0908270.nncloud"
       },
       "strategy" : {
         "rollingParams" : {
@@ -71,17 +75,19 @@
       "template" : {
         "metadata" : {
           "annotations" : {
+            "fabric8.io/git-commit" : "6d4128d781af61347c595729ab27c122af5078e6",
+            "fabric8.io/metrics-path" : "dashboard/file/kubernetes-pods.json/?var-project=vinnsl-nn-ui-deploy&var-version=0.0.1-SNAPSHOT",
+            "fabric8.io/scm-url" : "https://github.com/spring-projects/spring-boot/spring-boot-starter-parent/vinnsl-nn-ui/vinnsl-nn-ui-deploy",
             "fabric8.io/iconUrl" : "img/icons/spring-boot.svg",
-            "fabric8.io/metrics-path" : "dashboard/file/kubernetes-pods.json/?var-project=backend&var-version=0.0.1-SNAPSHOT",
-            "fabric8.io/scm-tag" : "HEAD",
-            "fabric8.io/scm-url" : "https://github.com/spring-projects/spring-boot/spring-boot-starter-parent/spring-boot-vuejs/backend"
+            "fabric8.io/git-branch" : "master",
+            "fabric8.io/scm-tag" : "HEAD"
           },
           "labels" : {
             "testProject" : "vinnsl-ui",
-            "app" : "backend",
+            "app" : "vinnsl-nn-ui-deploy",
             "provider" : "fabric8",
             "version" : "0.0.1-SNAPSHOT",
-            "group" : "de.jonashackt"
+            "group" : "at.ac.univie.a0908270.nncloud"
           }
         },
         "spec" : {
@@ -94,7 +100,7 @@
                 }
               }
             } ],
-            "image" : "jonashackt/backend:snapshot-180304-020741-0275",
+            "image" : "nncloud/vinnsl-nn-ui-deploy:snapshot-180304-020741-0275",
             "imagePullPolicy" : "IfNotPresent",
             "livenessProbe" : {
               "httpGet" : {
