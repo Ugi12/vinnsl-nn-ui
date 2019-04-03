@@ -96,6 +96,11 @@
                 href: '/tf-python-mnist'
               },
               {
+                title: 'MNIST Digit Recognition Test',
+                icon: 'fa fa-list-alt',
+                href: '/tf-python-mnist-test'
+              },
+              {
                 title: 'Wine Classification',
                 icon: 'fa fa-list-alt',
                 href: '/tf-python-wine'
