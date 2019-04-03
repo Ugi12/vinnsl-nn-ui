@@ -36,6 +36,7 @@ Vue.prototype.$vinnslStorageBackendUrl = 'http://localhost:8081'
 Vue.prototype.$vinnslBackendWorkerUrl = 'http://localhost:8000'
 Vue.prototype.$vinnslBackendUrlTensorFlowJS = 'http://localhost:3000'
 Vue.prototype.$vinnslBackendUrlTensorFlowPython = 'http://localhost:4000'
+// Vue.prototype.$vinnslBackendUrlTensorFlowPython = 'https://webhook.site/dada38ba-54ae-4a99-8301-1bfb5eb8d998'
 
 // Bootstrap
 Vue.use(BootstrapVue)
