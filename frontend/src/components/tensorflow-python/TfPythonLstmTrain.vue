@@ -164,6 +164,7 @@
     name: 'TfPythonLstmTrain',
     data () {
       return {
+        interval: null,
         name: 'TextFields',
         // textarea: 'TensorFlow is an end-to-end open source platform for machine learning. It has a comprehensive, flexible ecosystem of tools, libraries and community resources that lets researchers push the state-of-the-art in ML and developers easily build and deploy ML powered applications.',
         textarea: '',
@@ -471,10 +472,13 @@
     mounted () {
       this.getFiles()
       this.callRestService()
-      setInterval(function () {
+      this.interval = setInterval(function () {
         this.callRestService()
         this.getTrainingProcess()
       }.bind(this), 5000)
+    },
+    beforeDestroy () {
+      clearInterval(this.interval)
     }
   }
 </script>

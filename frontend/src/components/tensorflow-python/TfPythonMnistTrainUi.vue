@@ -243,6 +243,7 @@
     },
     data () {
       return {
+        interval: null,
         msg: 'ConbexNN',
         showResponse: true,
         response: '',
@@ -484,10 +485,13 @@
     mounted () {
       this.getFiles()
       this.callRestService()
-      setInterval(function () {
+      this.interval = setInterval(function () {
         this.callRestService()
         this.getTrainingProcess()
       }.bind(this), 5000)
+    },
+    beforeDestroy () {
+      clearInterval(this.interval)
     }
   }
 </script>
