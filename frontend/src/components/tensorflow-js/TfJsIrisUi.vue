@@ -77,8 +77,8 @@
                       </div>
                         -->
 
-                    <div v-if="vinnslItem.definition">
-                        <b-row style="margin-top: 15px;">
+                    <div>
+                        <b-row v-if="vinnslItem.definition" style="margin-top: 15px;">
                           <b-col><b-progress :value="trainingProcessForSelectedItem" :precision="2" variant="success" show-progress striped :animated="animate" /></b-col>
                         </b-row>
 
@@ -86,7 +86,7 @@
                         <p></p>
                         <p></p>
 
-                        <b-btn variant="success" :disabled=getTrainingButtonDisabled(vinnslItem.nncloud.status) @click="startTrainingById(vinnslItem.identifier); showResponse=true" id="btnItemStartTraining"><icon name="play"></icon> Start Training</b-btn>
+                        <b-btn v-if="vinnslItem.definition" variant="success" :disabled=getTrainingButtonDisabled(vinnslItem.nncloud.status) @click="startTrainingById(vinnslItem.identifier); showResponse=true" id="btnItemStartTraining"><icon name="play"></icon> Start Training</b-btn>
                         <b-button @click="deleteById(vinnslItem.identifier); showResponse=true; callRestService();" variant="danger" class="float-right"><icon name="trash"></icon></b-button>
 
                       </div>
@@ -347,7 +347,7 @@
           })
       },
       loadResult () {
-        AXIOS.get(this.$vinnslBackendUrl + `/vinnsl/get/statistic/` + this.selectedVinnslItem)
+        AXIOS.get(this.$vinnslBackendUrl + `/vinnsl/get/statistic-js/` + this.selectedVinnslItem)
           .then(response => {
             // console.log('response: ' + response)
             console.log('res: ' + response.data.createTimestamp)
@@ -402,6 +402,11 @@
           .catch(e => {
             this.errors.push(e)
           })
+      },
+      getDefininitionById () {
+        if (!this.vinnslItem.definition && this.selectedVinnslItem != null) {
+          this.getDetailsById(this.selectedVinnslItem)
+        }
       },
       deleteById (id) {
         this.vinnslItem = null
@@ -534,7 +539,14 @@
       setInterval(function () {
         this.callRestService()
         this.getTrainingProcess()
+        this.getDefininitionById()
+        if (this.vinnslItem !== '' && this.vinnslItem.nncloud !== 'undefined' && this.vinnslItem.nncloud.status !== 'undefined') {
+          this.getTrainingButtonDisabled(this.vinnslItem.nncloud.status)
+        }
       }.bind(this), 5000)
+    },
+    beforeDestroy () {
+      clearInterval(this.interval)
     }
   }
 </script>
