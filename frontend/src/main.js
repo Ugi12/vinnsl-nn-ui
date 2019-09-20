@@ -39,7 +39,7 @@ Vue.prototype.$vinnslBackendUrl = 'http://localhost:8080'
 Vue.prototype.$vinnslStorageBackendUrl = 'http://localhost:8081'
 Vue.prototype.$vinnslBackendWorkerUrl = 'http://localhost:8084'
 Vue.prototype.$vinnslBackendUrlTensorFlowJS = 'http://localhost:3000/tfjs'
-Vue.prototype.$vinnslBackendUrlTensorFlowPython = 'http://localhost:4000'
+Vue.prototype.$vinnslBackendUrlTensorFlowPython = 'http://localhost:4000/tfpy'
 
 /*
  * PROD ADRESSES
