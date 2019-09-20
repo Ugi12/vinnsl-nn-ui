@@ -14,7 +14,6 @@
               <b-badge :variant="`${getPillByStatus(item)}`" pill>{{item}}</b-badge>
             </b-list-group-item>
           </b-list-group>
-          <p></p>
           <!--  <p>  {{'current training engine: '}}{{getCurrentEngine()}}</p> -->
         </div><br>
 
@@ -477,6 +476,13 @@
           .catch(e => {
             this.errors.push(e)
           })
+      },
+      showNoItemsMessage (vinnslList) {
+        if (typeof vinnslList.length === 'undefined' || vinnslList.length === 0) {
+          return true
+        } else {
+          return false
+        }
       }
     },
     filters: {

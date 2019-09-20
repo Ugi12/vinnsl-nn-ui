@@ -15,7 +15,8 @@
               <b-badge :variant="`${getPillByStatus(item)}`" pill>{{item}}</b-badge>
             </b-list-group-item>
           </b-list-group>
-          <p></p>
+
+
         <!--  <p>  {{'current training engine: '}}{{getCurrentEngine()}}</p> -->
         </div><br>
 
@@ -128,10 +129,21 @@
                      <tree-view :data="vinnslItem.instance" :options="{maxDepth: 4, rootObjectKey: 'instance'}" style="text-align:left"></tree-view>
                    </b-tab>
                    -->
+                  <!--
+                  <b-tab title="Files">
+                    <p></p>
+                    <h3>Files</h3>
+                    <code v-if="vinnslItem.data && vinnslItem.data.data && vinnslItem.data.data.file">{{vinnslItem.data.data.file}}</code>
+
+                    <div class="row">
+                      <div class="col"><b-button @click="getFiles(); showResponse=true;" variant="primary"><icon name="refresh"></icon></b-button></div>
+                      <div class="col"><b-form-select v-model="selectedFile" :options="fileOptions" class="mb-3" /></div>
+                      <div class="col"><b-button @click="applyFile(vinnslItem.identifier, selectedFile); showResponse=true;" variant="primary"><icon name="save"></icon></b-button></div>
+                    </div>
+                  </b-tab>
+-->
                    <b-tab title="Result" @click="loadResult();">
                      <p></p>
-
-
                    <ul class="list-group" v-if="foundResult">
 
                        <li class="list-group-item"><b>Create time:</b><span style="margin-left: 58px">{{result.createTimestamp}}</span></li>
@@ -208,7 +220,7 @@
         </div>
       </div>
     </div>
-    <hr style="margin: 50px 0px;border: 1px solid #e3e3e3;">
+    <!--<hr style="margin: 50px 0px;border: 1px solid #e3e3e3;"> -->
     <div v-show="items.length>0">
 
 
@@ -411,6 +423,7 @@
       deleteById (id) {
         this.vinnslItem = null
         console.log('delete id:' + id)
+
         AXIOS.delete(this.$vinnslBackendUrl + `/vinnsl/` + id)
           .then(response => {
             // JSON responses are automatically parsed.
@@ -422,6 +435,15 @@
             this.headers = response.headers
             this.fullResponse = response
             this.vinnslItem = null
+          })
+          .catch(e => {
+            this.errors.push(e)
+          })
+        // delete model
+        AXIOS.post(this.$vinnslBackendUrlTensorFlowJS + `/worker/iris/delete`, {
+          id: id
+        })
+          .then(response => {
           })
           .catch(e => {
             this.errors.push(e)
@@ -523,6 +545,13 @@
           .catch(e => {
             this.errors.push(e)
           })
+      },
+      showNoItemsMessage (vinnslList) {
+        if (typeof vinnslList.length === 'undefined' || vinnslList.length === 0) {
+          return true
+        } else {
+          return false
+        }
       }
     },
     filters: {

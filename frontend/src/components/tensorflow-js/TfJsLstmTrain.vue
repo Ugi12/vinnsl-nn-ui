@@ -16,7 +16,7 @@
               <b-badge :variant="`${getPillByStatus(item)}`" pill>{{item}}</b-badge>
             </b-list-group-item>
           </b-list-group>
-          <p></p>
+
         </div><br>
 
 
@@ -66,7 +66,7 @@
                     </div>
 
                   </b-tab>
-                  <b-tab title="Generate Text">
+                  <b-tab title="Generate Text" @click="loadResult()">
                     <p></p>
                     <h3></h3>
                     <div v-if="foundResult">
@@ -103,17 +103,22 @@
                           </b-col>
 
                         </b-row>
-                        <b-row>
-                          <b-col>
+
                             <br>
-                            <b-btn variant="success" :disabled=getTrainingButtonDisabled(vinnslItem.nncloud.status) @click="generateTextById(vinnslItem.identifier); showResponse=true" id="btnItemGenerateText"> Generate Text</b-btn>
-                            <i id="info-icon" class="fa fa-info-circle" style="font-size:24px;"></i>
+                            <div class="row">
+                              <div class="col-lg-3">
+                                <b-btn variant="success" :disabled=getTrainingButtonDisabled(vinnslItem.nncloud.status) @click="generateTextById(vinnslItem.identifier); showResponse=true" id="btnItemGenerateText"> Generate Text</b-btn>
+                              </div>
+                              <div class="col-lg-2">
+                              <i id="info-icon" class="fa fa-info-circle" style="font-size:24px; margin-top: 6px;margin-left: -15px"></i>
+
                             <b-tooltip target="info-icon" placement="right">
                               If not entered a specific input, default values will be used.
                               (Length of the generated text: 200 and Generation temperature: 0.75)
                             </b-tooltip>
-                          </b-col>
-                        </b-row>
+                              </div>
+                            </div>
+
 
 
                       </div>
@@ -228,13 +233,19 @@
           loss: ''
         },
         foundResult: false,
-        disableTrainingButton: true
+        disableTrainingButton: true,
+        disableNoItemMsg: true
 
       }
     },
     watch: {
       textarea: function (value) {
-       // this.disableTrainingButton = false
+        if (this.textarea.length > 10) {
+          this.disableTrainingButton = false
+        } else {
+          this.disableTrainingButton = true
+        }
+
         console.log('watched:' + value)
       },
       genTextLenId: function () {
@@ -285,6 +296,7 @@
                 this.learningRate = element.value
               }
             })
+            this.getTrainingButtonDisabled(this.vinnslItem.nncloud.status)
           })
           .catch(e => {
             this.errors.push(e)
@@ -348,7 +360,7 @@
         //  AXIOS.get(this.$vinnslBackendUrlTensorFlowJS + `/worker/queue?id=` + id + `&epochs=` + this.epochs + `&learningRate=` + this.learningRate)
         AXIOS.post(this.$vinnslBackendUrlTensorFlowJS + `/worker/lstm`, {
           id: id,
-          text: this.textarea,
+          // text: this.textarea,
           epochs: this.epochs,
           batchSize: this.batchSize,
           nnSpecies: 'lstm',
@@ -451,6 +463,7 @@
       getPillByStatus (status) {
         // console.log(status)
         if (status === 'INPROGRESS') {
+          this.disableTrainingButton = true
           return 'warning'
         }
         if (status === 'FINISHED') {
@@ -497,6 +510,14 @@
           .catch(e => {
             this.errors.push(e)
           })
+      },
+      showNoItemsMessage (vinnslList) {
+        console.log('vinnslList.length9: ' + this.vinnslList.length)
+        if (typeof this.vinnslList.length === 'undefined' || vinnslList.length === 0) {
+          return true
+        } else {
+          return false
+        }
       }
     },
     filters: {
